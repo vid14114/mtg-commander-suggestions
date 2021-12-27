@@ -1,0 +1,9 @@
+[package]
+name = "mtg-commander-suggestions"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+
+[dependencies]
+color-eyre = "0.5.11"
