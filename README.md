@@ -6,9 +6,12 @@ mtg-commander-suggestions reads a csv export of a deckbox.org collection and tri
 
 ## Operating principle
 1. Update local copy of Scryfall Oracle Cards database
-2. Read collection csv file from stdin and match to oracle cards
+2. Read collection csv file and match to oracle cards
 3. Filter possible Commanders and extract keywords
 4. Group cards by keywords 
 
+## Run
+cargo run -- collection.csv
+
 ## Todo
-5. Count other common themes among grouped cards
+* Count other common themes among grouped cards
