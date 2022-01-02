@@ -8,7 +8,7 @@ _default:
 
 # Runs clippy on the sources 
 check:
-	cargo clippy --locked -- -D warnings
+	cargo clippy --locked -- --deny warnings
 
 # Runs unit tests
 test:
@@ -20,4 +20,4 @@ udeps:
 
 # Finds out of date dependencies
 outdated:
-    cargo outdated
+    cargo outdated --root-deps-only
