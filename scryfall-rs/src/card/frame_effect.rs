@@ -53,6 +53,10 @@ pub enum FrameEffect {
     /// The waxing and waning moon transform marks. Undocumented and unsupported
     /// for search.
     WaxingAndWaningMoonDfc,
+    /// The lesson frame
+    Lesson,
+    /// The booster frame
+    Booster,
 }
 
 impl std::fmt::Display for FrameEffect {
@@ -84,6 +88,8 @@ impl std::fmt::Display for FrameEffect {
                 FullArt => "fullart",
                 Nyxborn => "nyxborn",
                 WaxingAndWaningMoonDfc => "waxingandwaningmoondfc",
+                Lesson => "lesson",
+                Booster => "booster"
             }
         )
     }
