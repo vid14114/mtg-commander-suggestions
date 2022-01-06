@@ -2,7 +2,7 @@ mod card_utils;
 mod commander;
 mod storage;
 
-use std::path::PathBuf;
+use std::{collections::HashMap, path::PathBuf};
 
 use card_utils::{extract_card_colors, extract_oracle_text};
 use clap::Parser;
@@ -49,14 +49,21 @@ async fn main() -> Result<()> {
     }
     let mut commander_compatible_cards =
         find_compatible_cards(commander_keywords, &recognised_cards);
-    commander_compatible_cards
-        .sort_unstable_by(|(_, cards1), (_, cards2)| cards2.len().cmp(&cards1.len()));
+    commander_compatible_cards.sort_unstable_by(|(_, cards1), (_, cards2)| {
+        cards2
+            .values()
+            .flatten()
+            .count()
+            .cmp(&cards1.values().flatten().count())
+    });
     for (commander, compatible_cards) in &commander_compatible_cards {
-        println!(
-            "{}; {} compatible cards",
-            commander.name,
-            compatible_cards.len()
-        );
+        println!("{}", commander.name);
+        for (keyword, cards) in compatible_cards {
+            println!("\t{}", keyword);
+            for card in cards {
+                println!("\t\t{}", card.name);
+            }
+        }
     }
     Ok(())
 }
@@ -64,7 +71,8 @@ async fn main() -> Result<()> {
 fn filter_commanders(cards: &[Card]) -> Vec<Card> {
     cards
         .iter()
-        .filter(|card| card.type_line.contains("Legendary Creature"))
+        .filter(|card| card.type_line.contains("Legendary"))
+        .filter(|card| card.type_line.contains("Creature"))
         .map(|commander| commander.to_owned())
         .collect()
 }
@@ -72,7 +80,7 @@ fn filter_commanders(cards: &[Card]) -> Vec<Card> {
 fn find_compatible_cards(
     commander_keywords: Vec<(Card, Vec<String>)>,
     collection: &[Card],
-) -> Vec<(Card, Vec<Card>)> {
+) -> Vec<(Card, HashMap<String, Vec<Card>>)> {
     commander_keywords
         .iter()
         .map(|(commander, keywords)| {
@@ -88,7 +96,8 @@ fn match_colors_and_keywords(
     commander: &Card,
     keywords: &[String],
     collection: &[Card],
-) -> Vec<Card> {
+) -> HashMap<String, Vec<Card>> {
+    let mut keywords_cards = HashMap::new();
     collection
         .iter()
         .filter(|card| {
@@ -96,11 +105,17 @@ fn match_colors_and_keywords(
                 .iter()
                 .all(|color| commander.color_identity.contains(color))
         })
-        .filter(|card| {
-            keywords.iter().any(|keyword| {
+        .filter_map(|card| {
+            let keyword = keywords.iter().find(|&keyword| {
                 card.type_line.contains(keyword) || extract_oracle_text(card).contains(keyword)
-            })
+            });
+            keyword.map(|keyword| (keyword.to_owned(), card.to_owned()))
         })
-        .map(|card| card.to_owned())
-        .collect()
+        .for_each(|(keyword, card)| {
+            keywords_cards
+                .entry(keyword)
+                .or_insert_with(Vec::new)
+                .push(card)
+        });
+    keywords_cards
 }

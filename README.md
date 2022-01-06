@@ -26,5 +26,7 @@ docker run --rm -v ${PWD}:/usr/src/myapp -w /usr/src/myapp rust-x86_64-pc-window
 .\target\x86_64-pc-windows-gnu\release\mtg-commander-suggestions.exe collection.csv
 ```
 
-## Todo
+## Other ideas
+* Fuzzy text search
+* Match text phrases to known advantageous combos (eg "sacrifice X" <=> "X card from your graveyard to the battlefield")
 * Count other common themes among grouped cards
