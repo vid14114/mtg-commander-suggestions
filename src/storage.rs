@@ -5,21 +5,15 @@ use scryfall::{bulk::oracle_cards, Card};
 use serde::Deserialize;
 
 pub async fn update_oracle() -> Collection<Card> {
-    let client_options = ClientOptions::parse("mongodb://localhost:27017")
-        .await
-        .expect("Mongo parse client options");
-    let client = Client::with_options(client_options).expect("Mongo create client");
-    let db = client.database("oracle_cards");
-    let collection = db.collection::<Card>("cards");
+    let collection = get_card_collection().await;
 
     // Fetch and insert oracle cards if database is not populated
     if collection
         .estimated_document_count(None)
         .await
         .expect("Mongodb estimated count")
-        < 24600
+        < 1
     {
-        //currently there are about 24683 cards in oracle bulk data
         let cards = oracle_cards().expect("Fetch oracle cards");
         for card in cards {
             collection
@@ -50,6 +44,15 @@ pub async fn read_deckbox_collection(cards: Collection<Card>, csv_path: PathBuf)
         }
     }
     recognised_cards
+}
+
+pub async fn get_card_collection() -> Collection<Card> {
+    let client_options = ClientOptions::parse("mongodb://localhost:27017")
+        .await
+        .expect("Mongo parse client options");
+    let client = Client::with_options(client_options).expect("Mongo create client");
+    let db = client.database("oracle_cards");
+    db.collection::<Card>("cards")
 }
 
 #[derive(Debug, Deserialize)]

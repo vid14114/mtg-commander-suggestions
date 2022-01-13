@@ -8,11 +8,11 @@ _default:
 check:
 	cargo clippy --locked -- --deny warnings
 
-# Runs unit tests
+# Runs tests
 test:
-	cargo test --locked
+	cargo test --locked --test integration_test
 
-# Finds unused dependencies (requires installed rust nightly toolchain and cargo-outdated)
+# Finds unused dependencies (requires installed rust nightly toolchain and cargo-udeps)
 udeps:
     cargo +nightly udeps --all-targets --backend depinfo
 

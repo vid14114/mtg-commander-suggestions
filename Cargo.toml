@@ -13,3 +13,8 @@ mongodb = "2.1.0"
 scryfall = { version = "0.10.0", features = ["bulk_caching"], path = "scryfall-rs" }
 serde = "1.0.133"
 tokio = "1.15.0"
+
+[dev-dependencies]
+assert_cmd = "2.0.4"
+predicates = "2.1.1"
+serde_json = "1.0.74"
