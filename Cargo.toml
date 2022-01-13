@@ -10,6 +10,6 @@ clap = { version = "3.0.0", features = ["derive", "wrap_help"] }
 color-eyre = "0.5.11"
 csv = "1.1.6"
 mongodb = "2.1.0"
-scryfall = { version = "0.9.0", features = ["bulk_caching"], path = "scryfall-rs" }
+scryfall = { version = "0.10.0", features = ["bulk_caching"], path = "scryfall-rs" }
 serde = "1.0.133"
 tokio = "1.15.0"
