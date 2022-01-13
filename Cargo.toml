@@ -1,6 +1,6 @@
 [package]
 name = "scryfall"
-version = "0.9.0"
+version = "0.10.0"
 authors = ["Mendess2526 <pedro.mendes.26@gmail.com>"]
 edition = "2018"
 description = "A wrapper around the scryfall magic the gathering api"
@@ -33,6 +33,5 @@ uuid = { version = "0.8.2", features = ["serde"] }
 static_assertions = "1"
 
 [dev-dependencies]
-clap = "3.0.0-beta.2"
 rayon = "1.5.0"
 strum = { version = "0.20.0", features = ["derive"] }
