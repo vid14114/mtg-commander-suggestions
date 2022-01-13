@@ -2,5 +2,16 @@
   "extends": [
     "config:base"
   ],
-  "ignorePaths": ["**/scryfall-rs/**"]
+  "ignorePaths": ["**/scryfall-rs/**"],
+  "regexManagers": [
+    {
+      "fileMatch": ["^rust-toolchain\\.toml?$"],
+      "matchStrings": [
+        "channel\\s*=\\s*\"(?<currentValue>\\d+\\.\\d+\\.\\d+)\""
+      ],
+      "depNameTemplate": "rust",
+      "lookupNameTemplate": "rust-lang/rust",
+      "datasourceTemplate": "github-releases"
+    }
+  ]
 }
