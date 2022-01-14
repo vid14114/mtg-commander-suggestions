@@ -19,3 +19,7 @@ udeps:
 # Finds out of date dependencies (requires cargo-outdated)
 outdated:
     cargo outdated --root-deps-only
+
+# Runs test coverage (Linux only!, requires cargo-tarpaulin)
+test-coverage:
+    cargo tarpaulin --skip-clean --exclude-files scryfall-rs/* --test integration_test

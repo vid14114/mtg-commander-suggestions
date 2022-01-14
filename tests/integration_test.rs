@@ -1,19 +1,16 @@
+use mtg_commander_suggestions::{commander_suggestions, storage::get_card_collection};
 use std::fs::{canonicalize, File};
 
-use assert_cmd::{crate_name, Command};
-use mtg_commander_suggestions::storage::get_card_collection;
-use predicates::str::contains;
 use scryfall::Card;
 
 #[tokio::test]
 async fn recognise_card() {
     setup_database().await;
-    let mut cmd = Command::cargo_bin(crate_name!()).unwrap();
-    cmd.current_dir(canonicalize("./tests").unwrap())
-        .arg("minimal-collection.csv")
-        .assert()
-        .success()
-        .stdout(contains("Elf"));
+    let result =
+        commander_suggestions(canonicalize("./tests/minimal-collection.csv").unwrap()).await;
+    assert_eq!(result.len(), 1);
+    let (_, keywords) = &result[0];
+    assert!(keywords.keys().any(|keyword| keyword.eq("Elf")));
 }
 
 async fn setup_database() {
