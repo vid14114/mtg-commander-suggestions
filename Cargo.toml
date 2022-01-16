@@ -15,4 +15,4 @@ serde = "1.0.133"
 tokio = "1.15.0"
 
 [dev-dependencies]
-serde_json = "1.0.74"
+serde_json = "1.0.75"
