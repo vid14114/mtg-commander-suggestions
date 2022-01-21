@@ -18,7 +18,7 @@ async fn main() -> Result<()> {
     for (commander, compatible_cards) in &commander_compatible_cards {
         println!("{}", commander.name);
         for (keyword, cards) in compatible_cards {
-            println!("\t{}", keyword);
+            println!("\t{keyword}");
             for card in cards {
                 println!("\t\t{}", card.name);
             }
