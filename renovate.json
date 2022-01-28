@@ -3,6 +3,14 @@
     "config:base"
   ],
   "ignorePaths": ["**/scryfall-rs/**"],
+  "packageRules": [
+    {
+      "matchDepTypes": ["dependencies, dev-dependencies"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true,
+      "automergeType": "branch"
+    }
+  ],
   "regexManagers": [
     {
       "fileMatch": ["^rust-toolchain\\.toml?$"],
