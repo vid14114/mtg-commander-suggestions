@@ -5,7 +5,7 @@
   "ignorePaths": ["**/scryfall-rs/**"],
   "packageRules": [
     {
-      "matchDepTypes": ["dependencies, dev-dependencies"],
+      "matchDepTypes": ["dependencies", "dev-dependencies"],
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true,
       "automergeType": "branch"
