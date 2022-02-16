@@ -1,5 +1,7 @@
 # just manual: https://github.com/casey/just/#readme
-# discussion on cross-platform justfiles: https://github.com/casey/just/issues/1050
+
+# Use powershell instead of sh on windows
+set windows-powershell := true
 
 _default:
     @just --list
