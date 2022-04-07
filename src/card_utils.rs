@@ -29,13 +29,12 @@ pub fn extract_card_colors(card: &Card) -> Vec<Color> {
         Some(colors) => colors.to_owned(),
         None => extract_multiple_faces(card)
             .iter()
-            .map(|face| {
+            .flat_map(|face| {
                 face.colors
                     .as_ref()
                     .expect("Multiple faces colors")
                     .to_owned()
             })
-            .flatten()
             .collect(),
     }
 }
