@@ -52,6 +52,10 @@ pub enum SetType {
     /// A set made up of gold-bordered, oversize, or trophy cards that are not
     /// legal
     Memorabilia,
+    /// An Arena set designed for Alchemy
+    Alchemy,
+    /// A Commander-oriented gift set
+    Arsenal,
 }
 
 impl fmt::Display for SetType {
@@ -80,6 +84,8 @@ impl fmt::Display for SetType {
                 SetType::Promo => "promo",
                 SetType::Token => "token",
                 SetType::Memorabilia => "memorabilia",
+                SetType::Alchemy => "alchemy",
+                SetType::Arsenal => "arsenal",
             }
         )
     }
