@@ -12,7 +12,7 @@ csv = "1.1.6"
 mongodb = "2.2.1"
 scryfall = { version = "0.10.0", features = ["bulk_caching"], path = "scryfall-rs" }
 serde = "1.0.137"
-tokio = "1.18.0"
+tokio = "1.18.1"
 
 [dev-dependencies]
 serde_json = "1.0.80"
