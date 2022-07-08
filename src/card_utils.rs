@@ -2,6 +2,7 @@ use scryfall::{
     card::{CardFace, Color},
     Card,
 };
+use std::fmt::Write;
 
 pub fn extract_oracle_text(card: &Card) -> String {
     match &card.oracle_text {
@@ -14,9 +15,7 @@ pub fn extract_oracle_text(card: &Card) -> String {
                     .expect("Multiple faces oracle text")
             })
             .reduce(|combined_text, face_text| {
-                combined_text
-                    .to_owned()
-                    .push_str(&(format!(" {}", face_text)));
+                write!(combined_text.to_owned(), " {}", face_text).expect("Appending multiple faces text");
                 combined_text
             })
             .expect("Multiple faces reduce")
