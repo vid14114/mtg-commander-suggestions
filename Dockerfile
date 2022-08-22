@@ -1,4 +1,4 @@
-FROM rust:1.62.1
+FROM rust:1.63.0
 
 # cargo tools
 RUN cargo install cargo-outdated cargo-tarpaulin cargo-udeps just
