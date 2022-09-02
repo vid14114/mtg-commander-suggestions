@@ -6,7 +6,7 @@ edition = "2021"
 [features]
 
 [dependencies]
-clap = { version = "3.2.19", features = ["derive", "wrap_help"] }
+clap = { version = "3.2.20", features = ["derive", "wrap_help"] }
 color-eyre = "0.6.2"
 csv = "1.1.6"
 mongodb = "2.3.0"
