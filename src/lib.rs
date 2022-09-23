@@ -1,6 +1,7 @@
 mod card_utils;
 pub mod commander;
 pub mod storage;
+pub mod scryfall_tags;
 
 use std::{collections::HashMap, path::PathBuf};
 

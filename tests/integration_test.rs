@@ -1,4 +1,4 @@
-use mtg_commander_suggestions::{commander_suggestions, storage::get_card_collection};
+use mtg_commander_suggestions::{commander_suggestions, storage::get_card_collection, scryfall_tags::fetch_tags};
 use std::{
     fs::File,
     path::PathBuf,
@@ -13,6 +13,12 @@ async fn recognise_card() {
     assert_eq!(result.len(), 1);
     let (_, keywords) = &result[0];
     assert!(keywords.keys().any(|keyword| keyword.eq("Elf")));
+}
+
+#[tokio::test]
+async fn test_thirtyfour() {
+    let tags = fetch_tags().await.unwrap();
+    assert!(tags.iter().any(|tag| tag == "absorb"));
 }
 
 async fn setup_database() {

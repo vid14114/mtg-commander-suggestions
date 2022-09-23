@@ -1,7 +1,13 @@
-version: '3.1'
+version: '3.9'
 
 services:
   mongo:
     image: mongo
     ports:
       - 27017:27017
+
+  selenium:
+    image: selenium/standalone-firefox:4.4.0-20220831
+    ports:
+      - 4444:4444
+    shm_size: 2gb
