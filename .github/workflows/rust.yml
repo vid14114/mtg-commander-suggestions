@@ -18,6 +18,9 @@ jobs:
       
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@v1.9.0
+
+    - name: Start selenoid
+      uses: Xotabu4/selenoid-github-action@v2
       
     - name: Integration tests
       run: just test

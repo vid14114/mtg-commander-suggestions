@@ -1,8 +1,7 @@
-use mtg_commander_suggestions::{commander_suggestions, storage::get_card_collection, scryfall_tags::fetch_tags};
-use std::{
-    fs::File,
-    path::PathBuf,
+use mtg_commander_suggestions::{
+    commander_suggestions, scryfall_tags::fetch_tags, storage::get_card_collection,
 };
+use std::{fs::File, path::PathBuf};
 
 use scryfall::Card;
 
