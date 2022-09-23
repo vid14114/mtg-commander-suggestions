@@ -101,7 +101,7 @@ impl TagsPanel {
 
 pub async fn fetch_tags() -> WebDriverResult<Vec<String>> {
     let caps = DesiredCapabilities::firefox();
-    let driver = WebDriver::new("http://localhost:4444", caps)
+    let driver = WebDriver::new("http://localhost:4444/wd/hub", caps)
         .await
         .expect("WebDriver connection");
     driver.goto("https://tagger.scryfall.com/").await?;
