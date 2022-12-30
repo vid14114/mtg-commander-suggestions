@@ -28,6 +28,8 @@ jobs:
       run: cargo build --locked
       
     - uses: extractions/setup-just@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       
     - name: Start MongoDB
       uses: supercharge/mongodb-github-action@v1.9.0
