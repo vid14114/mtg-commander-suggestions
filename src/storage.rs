@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 
 use mongodb::{bson::doc, options::ClientOptions, Client, Collection};
-use scryfall::{bulk::oracle_cards, Card};
+use scryfall::{bulk::oracle_cards, Card, search::{query::Query, Search}};
 use serde::Deserialize;
 
 pub async fn update_oracle() -> Collection<Card> {
@@ -23,6 +23,12 @@ pub async fn update_oracle() -> Collection<Card> {
         }
     }
     collection
+}
+
+pub fn search_by_oracletag(tag: &str) -> Result<Vec<Card>, scryfall::Error> {
+    let query = Query::Custom(format!("{}{}", "oracletag:", tag));
+    let cards = query.search_all()?;
+    Ok(cards)
 }
 
 pub async fn read_deckbox_collection(cards: Collection<Card>, csv_path: PathBuf) -> Vec<Card> {
