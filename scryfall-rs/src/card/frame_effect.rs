@@ -57,6 +57,11 @@ pub enum FrameEffect {
     WaxingAndWaningMoonDfc,
     /// The booster card frame. Undocumented and unsupported for search.
     Booster,
+
+    /// Undocumented
+    FanDfc,
+    /// Undocumented
+    ConvertDfc,
 }
 
 impl std::fmt::Display for FrameEffect {
@@ -89,7 +94,9 @@ impl std::fmt::Display for FrameEffect {
                 FullArt => "fullart",
                 Nyxborn => "nyxborn",
                 WaxingAndWaningMoonDfc => "waxingandwaningmoondfc",
-                Booster => "booster"
+                Booster => "booster",
+                FanDfc => "fandfc",
+                ConvertDfc => "convertdfc",
             }
         )
     }
