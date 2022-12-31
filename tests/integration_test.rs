@@ -1,5 +1,7 @@
 use mtg_commander_suggestions::{
-    commander_suggestions, scryfall_tags::fetch_tags, storage::get_card_collection,
+    commander_suggestions,
+    scryfall_tags::fetch_tags,
+    storage::get_card_collection,
 };
 use std::{fs::File, path::PathBuf};
 
@@ -16,8 +18,8 @@ async fn recognise_card() {
 
 #[tokio::test]
 async fn test_thirtyfour() {
-    let tags = fetch_tags().await.unwrap();
-    assert!(tags.iter().any(|tag| tag == "absorb"));
+    let tags = fetch_tags(Some(1)).await.unwrap();
+    assert!(tags.iter().any(|tag| tag.tag == "absorb"));
 }
 
 async fn setup_database() {

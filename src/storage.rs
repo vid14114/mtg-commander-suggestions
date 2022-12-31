@@ -8,10 +8,15 @@ use scryfall::{
 };
 use serde::Deserialize;
 
+use crate::scryfall_tags::{fetch_tags, Tag};
+
 pub async fn update_oracle(remove_old: bool) {
     let collection = get_card_collection().await;
     if remove_old {
-        collection.drop(None).await.expect("Mongodb drop card collection");
+        collection
+            .drop(None)
+            .await
+            .expect("Mongodb drop card collection");
     }
 
     // Fetch and insert oracle cards if database is not populated
@@ -35,6 +40,32 @@ pub async fn update_oracle(remove_old: bool) {
                 .await
                 .expect("Mongo estimated document count")
         );
+    } else {
+        println!("Existing collection detected. Not updating!")
+    }
+}
+
+pub async fn update_tags(remove_old: bool) {
+    let tag_collection = get_tag_collection().await;
+    if remove_old {
+        tag_collection
+            .drop(None)
+            .await
+            .expect("Mongodb drop tag collection");
+    }
+
+    // Fetch and insert tags if database is not populated
+    if tag_collection
+        .estimated_document_count(None)
+        .await
+        .expect("Mongodb estimated count")
+        < 1
+    {
+        let tags = fetch_tags(None).await.expect("Fetch scryfall tags");
+        tag_collection
+            .insert_many(tags, None)
+            .await
+            .expect("Insert tags");
     } else {
         println!("Existing collection detected. Not updating!")
     }
@@ -75,6 +106,15 @@ pub async fn get_card_collection() -> Collection<Card> {
     let client = Client::with_options(client_options).expect("Mongo create client");
     let db = client.database("oracle_cards");
     db.collection::<Card>("cards")
+}
+
+pub async fn get_tag_collection() -> Collection<Tag> {
+    let client_options = ClientOptions::parse("mongodb://localhost:27017")
+        .await
+        .expect("Mongo parse client options");
+    let client = Client::with_options(client_options).expect("Mongo create client");
+    let db = client.database("oracle_cards");
+    db.collection::<Tag>("tags")
 }
 
 #[derive(Debug, Deserialize)]

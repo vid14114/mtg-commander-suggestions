@@ -2,7 +2,7 @@ use std::path::PathBuf;
 
 use clap::{Parser, Subcommand};
 use color_eyre::eyre::Result;
-use mtg_commander_suggestions::{commander_suggestions, import_oracle};
+use mtg_commander_suggestions::{commander_suggestions, import_oracle, import_tags};
 
 #[derive(Parser)]
 struct Arguments {
@@ -12,15 +12,17 @@ struct Arguments {
 
 #[derive(Subcommand)]
 enum Commands {
-    ImportOracle { 
+    ImportOracle {
         #[arg(short, long)]
-        remove_old: bool
+        remove_old: bool,
     },
-    ImportTags { 
+    ImportTags {
         #[arg(short, long)]
-        remove_old: bool
+        remove_old: bool,
     },
-    Suggest { csv_path: PathBuf },
+    Suggest {
+        csv_path: PathBuf,
+    },
 }
 
 #[tokio::main]
@@ -29,7 +31,7 @@ async fn main() -> Result<()> {
     let arguments = Arguments::parse();
     match arguments.command {
         Commands::ImportOracle { remove_old } => import_oracle(remove_old).await,
-        Commands::ImportTags { remove_old } => todo!(),
+        Commands::ImportTags { remove_old } => import_tags(remove_old).await,
         Commands::Suggest { csv_path } => {
             let commander_compatible_cards = commander_suggestions(csv_path).await;
             for (commander, compatible_cards) in &commander_compatible_cards {

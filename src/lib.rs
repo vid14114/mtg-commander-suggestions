@@ -8,6 +8,7 @@ use std::{collections::HashMap, path::PathBuf};
 use scryfall::Card;
 
 use card_utils::{extract_card_colors, extract_oracle_text};
+use storage::update_tags;
 
 use crate::{
     commander::extract_catalogued_keywords,
@@ -16,6 +17,10 @@ use crate::{
 
 pub async fn import_oracle(remove_old: bool) {
     update_oracle(remove_old).await;
+}
+
+pub async fn import_tags(remove_old: bool) {
+    update_tags(remove_old).await;
 }
 
 pub async fn commander_suggestions(csv_path: PathBuf) -> Vec<(Card, HashMap<String, Vec<Card>>)> {
