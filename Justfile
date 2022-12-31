@@ -22,6 +22,6 @@ udeps:
 outdated:
     cargo outdated --root-deps-only
 
-# Runs test coverage (Linux only!, requires cargo-tarpaulin)
-test-coverage:
-    cargo tarpaulin --skip-clean --exclude-files scryfall-rs/* --test integration_test
+# Runs mutation testing (requires cargo-mutants)
+mutation-test:
+    cargo mutants --output target

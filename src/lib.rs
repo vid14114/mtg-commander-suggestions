@@ -14,17 +14,12 @@ use crate::{
     storage::{read_deckbox_collection, update_oracle},
 };
 
-pub async fn commander_suggestions(csv_path: PathBuf) -> Vec<(Card, HashMap<String, Vec<Card>>)> {
-    let cards_database = update_oracle().await;
-    println!(
-        "Imported about {} cards",
-        cards_database
-            .estimated_document_count(None)
-            .await
-            .expect("Mongo estimated document count")
-    );
+pub async fn import_oracle(remove_old: bool) {
+    update_oracle(remove_old).await;
+}
 
-    let recognised_cards = read_deckbox_collection(cards_database, csv_path).await;
+pub async fn commander_suggestions(csv_path: PathBuf) -> Vec<(Card, HashMap<String, Vec<Card>>)> {
+    let recognised_cards = read_deckbox_collection(csv_path).await;
     println!(
         "Recognised {} cards from collection",
         &recognised_cards.len()
