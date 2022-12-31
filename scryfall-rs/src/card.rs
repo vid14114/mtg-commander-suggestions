@@ -13,6 +13,7 @@ mod layout;
 mod legality;
 mod preview;
 mod price;
+mod produced_mana;
 mod rarity;
 mod related_card;
 
@@ -33,6 +34,7 @@ pub use self::layout::Layout;
 pub use self::legality::Legality;
 pub use self::preview::Preview;
 pub use self::price::Price;
+pub use self::produced_mana::{ProducedMana, UnfinityMana};
 pub use self::rarity::Rarity;
 pub use self::related_card::RelatedCard;
 use crate::format::Format;
@@ -199,7 +201,7 @@ pub struct Card {
     pub power: Option<String>,
 
     /// Colors of mana that this card could produce.
-    pub produced_mana: Option<Vec<Color>>,
+    pub produced_mana: Option<Vec<ProducedMana>>,
 
     /// True if this card is on the Reserved List.
     pub reserved: bool,
@@ -564,12 +566,12 @@ impl Card {
     /// # Examples
     /// ```rust
     /// use scryfall::card::Card;
-    /// match Card::card("0b81b329-4ef5-4b55-9fe7-9ed69477e96b".parse().unwrap()) {
+    /// match Card::scryfall_id("0b81b329-4ef5-4b55-9fe7-9ed69477e96b".parse().unwrap()) {
     ///     Ok(card) => assert_eq!(card.name, "Cowed by Wisdom"),
     ///     Err(e) => panic!("{:?}", e),
     /// }
     /// ```
-    pub fn card(scryfall_id: Uuid) -> crate::Result<Card> {
+    pub fn scryfall_id(scryfall_id: Uuid) -> crate::Result<Card> {
         Uri::from(CARDS_URL.join(&scryfall_id.to_string())?).fetch()
     }
 }
