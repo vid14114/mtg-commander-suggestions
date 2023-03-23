@@ -27,7 +27,7 @@ pub async fn update_oracle(remove_old: bool) {
         .expect("Mongodb estimated count")
         < 1
     {
-        let cards = oracle_cards().expect("Fetch oracle cards");
+        let cards = oracle_cards().await.expect("Fetch oracle cards");
         for card in cards {
             collection
                 .insert_one(card.expect("Fetch card"), None)
@@ -64,7 +64,7 @@ pub async fn update_tags(remove_old: bool) {
     {
         let tags = fetch_tags(None).await.expect("Fetch scryfall tags");
         for tag in tags {
-            let cards = search_by_oracletag(&tag).unwrap_or_default();
+            let cards = search_by_oracletag(&tag).await.unwrap_or_default();
             println!("{} results", cards.len());
             tag_collection.insert_one(Tag { tag, cards }, None).await.expect("Insert tags");
         }
@@ -73,10 +73,10 @@ pub async fn update_tags(remove_old: bool) {
     }
 }
 
-pub fn search_by_oracletag(tag: &str) -> Result<Vec<Card>, scryfall::Error> {
+pub async fn search_by_oracletag(tag: &str) -> Result<Vec<Card>, scryfall::Error> {
     print!("Searching for oracletag: {}; ", tag);
     let query = Query::Custom(format!("{}\"{}\"", "oracletag:", tag));
-    let cards = query.search_all()?;
+    let cards = query.search_all().await?;
     Ok(cards)
 }
 

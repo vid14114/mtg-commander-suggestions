@@ -11,7 +11,7 @@ color-eyre = "0.6.2"
 csv = "1.2.1"
 futures = "0.3.24"
 mongodb = "2.4.0"
-scryfall = { version = "0.11.1", features = ["bulk_caching"], path = "scryfall-rs" }
+scryfall = { version = "0.12.4", features = ["bulk_caching"] }
 serde = "1.0.158"
 thirtyfour = "0.31.0"
 tokio = "1.26.0"

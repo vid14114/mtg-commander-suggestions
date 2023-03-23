@@ -33,7 +33,7 @@ pub async fn commander_suggestions(csv_path: PathBuf) -> Vec<(Card, HashMap<Stri
     let commanders = filter_commanders(&recognised_cards);
     println!("Found {} possible commanders", commanders.len());
 
-    let commander_keywords = extract_catalogued_keywords(commanders);
+    let commander_keywords = extract_catalogued_keywords(commanders).await;
     for (commander, keywords) in &commander_keywords {
         println!("{}; {:#?}", commander.name, keywords);
     }
@@ -54,8 +54,8 @@ pub async fn commander_suggestions(csv_path: PathBuf) -> Vec<(Card, HashMap<Stri
 fn filter_commanders(cards: &[Card]) -> Vec<Card> {
     cards
         .iter()
-        .filter(|card| card.type_line.contains("Legendary"))
-        .filter(|card| card.type_line.contains("Creature"))
+        .filter(|card| card.type_line.as_ref().unwrap().contains("Legendary"))
+        .filter(|card| card.type_line.as_ref().unwrap().contains("Creature"))
         .map(|commander| commander.to_owned())
         .collect()
 }
@@ -90,7 +90,7 @@ fn match_colors_and_keywords(
         })
         .filter_map(|card| {
             let keyword = keywords.iter().find(|&keyword| {
-                card.type_line.contains(keyword) || extract_oracle_text(card).contains(keyword)
+                card.type_line.as_ref().unwrap().contains(keyword) || extract_oracle_text(card).contains(keyword)
             });
             keyword.map(|keyword| (keyword.to_owned(), card.to_owned()))
         })
