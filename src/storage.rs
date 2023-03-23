@@ -1,3 +1,4 @@
+use core::fmt;
 use std::path::PathBuf;
 
 use mongodb::{bson::doc, options::ClientOptions, Client, Collection};
@@ -6,9 +7,9 @@ use scryfall::{
     search::{query::Query, Search},
     Card,
 };
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-use crate::scryfall_tags::{fetch_tags, Tag};
+use crate::scryfall_tags::fetch_tags;
 
 pub async fn update_oracle(remove_old: bool) {
     let collection = get_card_collection().await;
@@ -62,17 +63,19 @@ pub async fn update_tags(remove_old: bool) {
         < 1
     {
         let tags = fetch_tags(None).await.expect("Fetch scryfall tags");
-        tag_collection
-            .insert_many(tags, None)
-            .await
-            .expect("Insert tags");
+        for tag in tags {
+            let cards = search_by_oracletag(&tag).unwrap_or_default();
+            println!("{} results", cards.len());
+            tag_collection.insert_one(Tag { tag, cards }, None).await.expect("Insert tags");
+        }
     } else {
         println!("Existing collection detected. Not updating!")
     }
 }
 
 pub fn search_by_oracletag(tag: &str) -> Result<Vec<Card>, scryfall::Error> {
-    let query = Query::Custom(format!("{}{}", "oracletag:", tag));
+    print!("Searching for oracletag: {}; ", tag);
+    let query = Query::Custom(format!("{}\"{}\"", "oracletag:", tag));
     let cards = query.search_all()?;
     Ok(cards)
 }
@@ -121,4 +124,16 @@ pub async fn get_tag_collection() -> Collection<Tag> {
 #[serde(rename_all = "PascalCase")]
 struct CsvCard {
     name: String,
+}
+
+#[derive(Clone, Serialize, Deserialize)]
+pub struct Tag {
+    pub tag: String,
+    cards: Vec<Card>
+}
+
+impl fmt::Display for Tag {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.tag)
+    }
 }

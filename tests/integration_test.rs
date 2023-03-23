@@ -19,7 +19,7 @@ async fn recognise_card() {
 #[tokio::test]
 async fn test_thirtyfour() {
     let tags = fetch_tags(Some(1)).await.unwrap();
-    assert!(tags.iter().any(|tag| tag.tag == "absorb"));
+    assert!(tags.iter().any(|tag| tag == "absorb"));
 }
 
 async fn setup_database() {

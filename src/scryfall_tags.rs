@@ -1,8 +1,6 @@
-use core::fmt;
 use std::{thread, time::Duration};
 
 use futures::{stream, StreamExt};
-use serde::{Deserialize, Serialize};
 use thirtyfour::{
     components::{Component, ElementResolver, SelectElement},
     prelude::WebDriverResult,
@@ -39,7 +37,7 @@ impl HomePageComponent {
 }
 
 impl TagsPanel {
-    pub async fn get_tags(&self, until_page: Option<i32>) -> WebDriverResult<Vec<Tag>> {
+    pub async fn get_tags(&self, until_page: Option<i32>) -> WebDriverResult<Vec<String>> {
         let select_element = SelectElement::new(&resolve!(self.tags_type_selector)).await?;
         select_element
             .select_by_value("tag:ORACLE_CARD_TAG")
@@ -58,7 +56,7 @@ impl TagsPanel {
                 .unwrap(),
         };
 
-        let mut all_tags: Vec<Tag> = vec![];
+        let mut all_tags: Vec<String> = vec![];
         while current_page < last_page {
             let new_tags = self.fill_tags_from_current_page(&mut all_tags).await?;
             println!("PAGE {}", current_page);
@@ -81,10 +79,10 @@ impl TagsPanel {
 
     async fn fill_tags_from_current_page(
         &self,
-        all_tags: &mut Vec<Tag>,
-    ) -> WebDriverResult<Vec<Tag>> {
+        all_tags: &mut Vec<String>,
+    ) -> WebDriverResult<Vec<String>> {
         let tags = resolve_present!(self.tags);
-        let tag_names: Vec<Tag> = stream::unfold(tags.into_iter(), |mut tags| async {
+        let tag_names: Vec<String> = stream::unfold(tags.into_iter(), |mut tags| async {
             let tag_element = tags.next()?;
             if let Ok(a) = tag_element.find(By::Tag("a")).await {
                 let text = a.text().await.ok()?;
@@ -98,15 +96,14 @@ impl TagsPanel {
                 None
             }
         })
-        .map(|t| Tag { tag: t })
-        .collect::<Vec<Tag>>()
+        .collect::<Vec<String>>()
         .await;
         all_tags.extend(tag_names.clone());
         Ok(tag_names)
     }
 }
 
-pub async fn fetch_tags(until_page: Option<i32>) -> WebDriverResult<Vec<Tag>> {
+pub async fn fetch_tags(until_page: Option<i32>) -> WebDriverResult<Vec<String>> {
     let caps = DesiredCapabilities::firefox();
     let driver = WebDriver::new("http://localhost:4444", caps)
         .await
@@ -117,15 +114,4 @@ pub async fn fetch_tags(until_page: Option<i32>) -> WebDriverResult<Vec<Tag>> {
     let tags = tags_panel.get_tags(until_page).await?;
     driver.quit().await?;
     Ok(tags)
-}
-
-#[derive(Clone, Serialize, Deserialize)]
-pub struct Tag {
-    pub tag: String,
-}
-
-impl fmt::Display for Tag {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.tag)
-    }
 }
