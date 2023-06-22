@@ -9,7 +9,7 @@ edition = "2021"
 clap = { version = "4.3.5", features = ["derive", "wrap_help"] }
 color-eyre = "0.6.2"
 csv = "1.2.2"
-mongodb = "2.5.0"
+mongodb = "2.6.0"
 scryfall = { version = "0.10.0", features = ["bulk_caching"], path = "scryfall-rs" }
 serde = "1.0.164"
 tokio = "1.28.2"
